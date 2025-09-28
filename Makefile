@@ -1,4 +1,4 @@
-.PHONY: init, bun, bun-apk, bun-image, go, go-apk, go-image, node, node-apk, node-image
+.PHONY: init, bun, bun-apk, bun-image, go, go-apk, go-image, node, node-apk, node-image, python, python-apk, python-image
 
 init:
 	docker run --rm -v "${PWD}":/work cgr.dev/chainguard/melange keygen
@@ -26,3 +26,11 @@ node-apk:
 	./bin/build.sh node apk
 node-image:
 	./bin/build.sh node image
+
+python:
+	./bin/build.sh python apk
+	./bin/build.sh python image
+python-apk:
+	./bin/build.sh python apk
+python-image:
+	./bin/build.sh python image

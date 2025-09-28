@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/chainguard-dev/melange/main/pkg/config/schema.json
+
+package:
+  name: python-application
+  version: 0.1.0
+  description: A python application
+  epoch: 0
+  copyright:
+    - license: MIT
+  dependencies:
+    runtime: [python-3.13]
+
+environment:
+  contents:
+    keyring:
+      - https://packages.wolfi.dev/os/wolfi-signing.rsa.pub
+      - ./melange.rsa.pub
+    repositories:
+      - https://packages.wolfi.dev/os
+    packages:
+      - ca-certificates-bundle
+      - busybox
+      - python-3.13
+      - uv
+
+pipeline:
+  - name: Build
+    runs: |
+      set -eou pipefail
+      INSTALLDIR="${{targets.destdir}}/opt/python-application"
+      mkdir -p "${INSTALLDIR}"
+      uv pip compile pyproject.toml --quiet --output-file requirements.txt
+      python3 -m venv "${INSTALLDIR}/env"
+      . "${INSTALLDIR}/env/bin/activate"
+      pip install --no-cache-dir -r requirements.txt
+      cp main.py "${INSTALLDIR}"

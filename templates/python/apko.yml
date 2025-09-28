@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/chainguard-dev/apko/main/pkg/build/types/schema.json
+
+contents:
+  keyring:
+    - https://packages.wolfi.dev/os/wolfi-signing.rsa.pub
+    - ./melange.rsa.pub
+  repositories:
+    - https://packages.wolfi.dev/os
+    - "@local /work/packages"
+  packages:
+    - wolfi-base
+    - ca-certificates-bundle
+    - python-application@local
+
+accounts:
+  groups:
+    - groupname: nonroot
+      gid: 65532
+  users:
+    - username: nonroot
+      uid: 65532
+  run-as: "65532"
+
+environment:
+  PATH: "/usr/local/bin:/usr/bin:/bin:/opt/python-application/env/bin"
+
+work-dir: /opt/python-application
+
+entrypoint:
+  command: /opt/python-application/env/bin/python -m uvicorn main:app --host 0.0.0.0 --port 3000
+
+annotations:
+  org.opencontainers.image.title: "python-application"
+  org.opencontainers.image.description: "A simple python application"
+  org.opencontainers.image.licenses: "MIT"

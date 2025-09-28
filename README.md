@@ -9,6 +9,7 @@ A collection of templates for building applications using
 - [bun](templates/bun)
 - [go](templates/go)
 - [node](templates/node)
+- [python](templates/python)
 
 ## Usage
 
