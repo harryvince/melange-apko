@@ -4,7 +4,6 @@ package:
   name: bun-application
   version: 0.1.0
   description: A bun application
-  target-architecture: [aarch64]
   epoch: 0
   copyright:
     - license: MIT

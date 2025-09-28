@@ -1,12 +1,14 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/chainguard-dev/melange/main/pkg/config/schema.json
 
 package:
-  name: go-application
+  name: node-application
   version: 0.1.0
-  description: A golang application
+  description: A node application
   epoch: 0
   copyright:
     - license: MIT
+  dependencies:
+    runtime: [nodejs-22]
 
 environment:
   contents:
@@ -18,14 +20,15 @@ environment:
     packages:
       - ca-certificates-bundle
       - busybox
-      - go-1.24
+      - nodejs-22
+      - npm
 
 pipeline:
   - name: Build
     runs: |
       set -eou pipefail
-      INSTALLDIR="${{targets.destdir}}/usr/bin"
+      INSTALLDIR="${{targets.destdir}}/opt/node-application"
       mkdir -p "${INSTALLDIR}"
-      go install
-      go build -o "${INSTALLDIR}/go-application" main.go
-      chmod +x "${INSTALLDIR}/go-application"
+      npm ci --omit=dev
+      cp -r ./node_modules "${INSTALLDIR}"
+      cp -r ./src "${INSTALLDIR}"
