@@ -7,6 +7,7 @@ A collection of templates for building applications using
 ## Current Templates
 
 - [bun](templates/bun)
+- [go](templates/go)
 
 ## Usage
 
@@ -16,6 +17,10 @@ run: `make init`. This will generate required rsa keys for signing packages.
 Then to build packages and their respective container images, you can run:
 
 ```bash
+make <template-name>
+
+# or
+
 make <template-name>-apk
 make <template-name>-image
 ```
