@@ -1,0 +1,26 @@
+[tasks.init]
+run = '''
+docker run --rm -v "${PWD}":/work cgr.dev/chainguard/melange keygen
+'''
+
+[tasks.melange]
+usage = 'arg "<template>"'
+run = '''
+docker run --privileged --rm -v "${PWD}":/work \
+        cgr.dev/chainguard/melange build templates/${usage_template?}/melange.yml \
+        --arch aarch64 --signing-key melange.rsa
+'''
+
+[tasks.apko]
+usage = 'arg "<template>"'
+run = '''
+docker run --rm --workdir /work -v ${PWD}:/work cgr.dev/chainguard/apko \
+        build templates/${usage_template?}/apko.yml ${usage_template?}-application:0.1.0 ${usage_template?}-application.tar --arch host
+find . -name "sbom*" -exec rm {} \;
+docker load <${usage_template?}-application.tar
+docker image ls | grep ${usage_template?}-application
+rm ${usage_template?}-application.tar
+'''
+[tasks.build]
+usage = 'arg "<template>"'
+run = ['mise melange ${usage_template?}', 'mise apko ${usage_template?}']
